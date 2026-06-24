@@ -1,6 +1,6 @@
 import { NextResponse } from "next/dist/server/web/spec-extension/response";
 import { prisma } from "@/lib/prisma";
-import { getServerSession } from "next-auth/react";
+import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 
 export async function GET() {
