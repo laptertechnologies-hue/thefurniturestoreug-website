@@ -37,9 +37,9 @@ export default function Navbar() {
                   <span style={{ fontSize: '0.8rem', fontWeight: 600 }}>Admin</span>
                 </Link>
               )}
-              <button onClick={() => signOut()} className="icon-btn" title="Sign Out">
-                <LogOut size={20} />
-              </button>
+              <Link href="/profile" className="icon-btn" title="My Profile">
+                <User size={20} />
+              </Link>
             </>
           ) : (
             <Link href="/login" className="icon-btn" title="Sign In">
