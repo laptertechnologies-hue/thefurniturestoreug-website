@@ -5,9 +5,11 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, CheckCircle2 } from "lucide-react";
 import { useCartStore } from "@/store/cartStore";
+import { useSession } from "next-auth/react";
 import "./page.css";
 
 export default function Checkout() {
+  const { data: session, status } = useSession();
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -32,7 +34,23 @@ export default function Checkout() {
     setMounted(true);
   }, []);
 
-  if (!mounted) return null;
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      router.push("/login?callbackUrl=/checkout");
+    }
+  }, [status, router]);
+
+  useEffect(() => {
+    if (session?.user) {
+      setFormData(prev => ({
+        ...prev,
+        name: session.user?.name || prev.name,
+        email: session.user?.email || prev.email,
+      }));
+    }
+  }, [session]);
+
+  if (!mounted || status === "loading" || status === "unauthenticated") return null;
 
   // Redirect if cart is empty
   if (cartItems.length === 0) {
