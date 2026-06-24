@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ShoppingBag, Instagram, Facebook, Twitter } from "lucide-react";
+import { ShoppingBag, Instagram, Facebook, Youtube } from "lucide-react";
 import "./Footer.css";
 
 export default function Footer() {
@@ -17,7 +17,7 @@ export default function Footer() {
           <div className="social-links">
             <a href="#" className="social-link"><Instagram size={20} /></a>
             <a href="#" className="social-link"><Facebook size={20} /></a>
-            <a href="#" className="social-link"><Twitter size={20} /></a>
+            <a href="#" className="social-link"><Youtube size={20} /></a>
           </div>
         </div>
         
