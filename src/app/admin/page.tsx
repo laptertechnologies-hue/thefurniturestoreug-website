@@ -37,6 +37,7 @@ export default function AdminDashboard() {
   const [newSlideSub, setNewSlideSub] = useState("");
   const [newSlideLink, setNewSlideLink] = useState("");
   const [newSlideImage, setNewSlideImage] = useState("");
+  const [editingSlide, setEditingSlide] = useState<string | null>(null);
 
   // Testimonial Form
   const [newTestAuthor, setNewTestAuthor] = useState("");
@@ -170,15 +171,26 @@ export default function AdminDashboard() {
   // SLIDES LOGIC
   const handleSaveSlide = async (e: React.FormEvent) => {
     e.preventDefault();
-    const res = await fetch("/api/slides", {
-      method: "POST",
+    const method = editingSlide ? "PUT" : "POST";
+    const url = editingSlide ? `/api/slides/${editingSlide}` : "/api/slides";
+    
+    const res = await fetch(url, {
+      method,
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ imageData: newSlideImage, title: newSlideTitle, subtitle: newSlideSub, link: newSlideLink })
+      body: JSON.stringify({ imageData: newSlideImage || undefined, title: newSlideTitle, subtitle: newSlideSub, link: newSlideLink })
     });
     if (res.ok) {
-      setNewSlideImage(""); setNewSlideTitle(""); setNewSlideSub(""); setNewSlideLink("");
+      setNewSlideImage(""); setNewSlideTitle(""); setNewSlideSub(""); setNewSlideLink(""); setEditingSlide(null);
       fetchSlides();
     } else alert("Failed to save slide");
+  };
+
+  const editSlide = (s: any) => {
+    setEditingSlide(s.id);
+    setNewSlideTitle(s.title || "");
+    setNewSlideSub(s.subtitle || "");
+    setNewSlideLink(s.link || "");
+    setNewSlideImage("");
   };
 
   const handleDeleteSlide = async (id: string) => {
@@ -268,18 +280,21 @@ export default function AdminDashboard() {
           <div className="admin-products animate-fade-in-up">
             <div className="tab-header"><h2>Manage Home Slideshow</h2></div>
             <div className="admin-form-card">
-              <h3>Add New Slide</h3>
+              <h3>{editingSlide ? "Edit Slide" : "Add New Slide"}</h3>
               <form onSubmit={handleSaveSlide} className="admin-form">
                 <div className="form-group">
-                  <label>Slide Image</label>
-                  <input type="file" accept="image/*" onChange={(e) => handleImageUpload(e, setNewSlideImage)} required />
+                  <label>Slide Image {editingSlide && "(Leave empty to keep existing)"}</label>
+                  <input type="file" accept="image/*" onChange={(e) => handleImageUpload(e, setNewSlideImage)} required={!editingSlide} />
                   {newSlideImage && <img src={newSlideImage} style={{height: 60, marginTop: 10}} alt="preview" />}
                 </div>
                 <div className="form-row">
                   <div className="form-group"><input type="text" placeholder="Title (Optional)" value={newSlideTitle} onChange={e => setNewSlideTitle(e.target.value)} /></div>
                   <div className="form-group"><input type="text" placeholder="Subtitle (Optional)" value={newSlideSub} onChange={e => setNewSlideSub(e.target.value)} /></div>
                 </div>
-                <button type="submit" className="btn-primary" disabled={!newSlideImage}><Plus size={16} /> Add Slide</button>
+                <div style={{display: 'flex', gap: 10}}>
+                  <button type="submit" className="btn-primary" disabled={!editingSlide && !newSlideImage}>{editingSlide ? "Update Slide" : "Add Slide"}</button>
+                  {editingSlide && <button type="button" className="btn-secondary" onClick={() => {setEditingSlide(null); setNewSlideTitle(""); setNewSlideSub(""); setNewSlideLink(""); setNewSlideImage("")}}>Cancel</button>}
+                </div>
               </form>
             </div>
             <div className="data-table-container">
@@ -290,7 +305,10 @@ export default function AdminDashboard() {
                     <tr key={s.id}>
                       <td><img src={s.imageData} style={{height: 50}} alt="slide" /></td>
                       <td>{s.title || '-'}</td>
-                      <td><button onClick={() => handleDeleteSlide(s.id)} className="btn-icon-danger"><Trash2 size={16} /></button></td>
+                      <td>
+                        <button onClick={() => editSlide(s)} className="btn-icon-secondary" style={{marginRight: 8}}><Edit size={16} /></button>
+                        <button onClick={() => handleDeleteSlide(s.id)} className="btn-icon-danger"><Trash2 size={16} /></button>
+                      </td>
                     </tr>
                   ))}
                   {slides.length === 0 && <tr><td colSpan={3}>No slides added</td></tr>}
