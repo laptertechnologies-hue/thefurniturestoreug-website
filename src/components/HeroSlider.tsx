@@ -45,12 +45,17 @@ export default function HeroSlider({ slides }: { slides: any[] }) {
         >
           <div className="slide-overlay">
             <div className="container slide-content">
-              {slide.subtitle && <span className="badge">{slide.subtitle}</span>}
-              {slide.title && <h1 className="hero-title">{slide.title}</h1>}
+              <span className="badge">{slide.subtitle || "Premium Quality"}</span>
+              
+              {slide.title ? (
+                <h1 className="hero-title">{slide.title}</h1>
+              ) : (
+                <h1 className="hero-title">Elevate Your Space with <span>Timeless Furniture</span></h1>
+              )}
               
               <div className="hero-actions">
                 <Link href={slide.link || "/shop"} className="btn-primary">
-                  Explore <ArrowRight size={20} />
+                  {slide.title ? "Explore" : "Shop Collection"} <ArrowRight size={20} />
                 </Link>
               </div>
             </div>
