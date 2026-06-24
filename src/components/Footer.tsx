@@ -38,10 +38,10 @@ export default function Footer() {
           <h2>The Furniture Store UG</h2>
           <p>Elevating Ugandan homes with premium, handcrafted furniture. Quality that lasts a lifetime.</p>
           <div className="social-links">
-            <a href="https://wa.me/256765245921" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><WhatsappIcon /></a>
+            <a href="https://wa.me/message/XKPTWDCXAYGNB1" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><WhatsappIcon /></a>
             <a href="#" target="_blank" rel="noopener noreferrer" aria-label="TikTok"><TiktokIcon /></a>
             <a href="#" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)"><XIcon /></a>
-            <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><InstagramIcon /></a>
+            <a href="https://www.instagram.com/the_furniture_store_ug?igsh=MTI1bjJhZDNxa3d2eg%3D%3D&utm_source=qr" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><InstagramIcon /></a>
           </div>
         </div>
         
@@ -71,7 +71,7 @@ export default function Footer() {
             </li>
             <li>
               <Mail size={18} className="contact-icon" />
-              <span>princehenrykimbugwe8@gmail.com</span>
+              <span>thefurniturestoreug@gmail.com</span>
             </li>
           </ul>
         </div>

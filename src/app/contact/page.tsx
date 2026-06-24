@@ -26,7 +26,7 @@ export default function Contact() {
               <div className="info-icon"><Mail size={24} /></div>
               <div>
                 <h3>Email Address</h3>
-                <p>princehenrykimbugwe8@gmail.com</p>
+                <p>thefurniturestoreug@gmail.com</p>
               </div>
             </div>
 
