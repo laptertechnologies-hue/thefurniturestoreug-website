@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Facebook, Twitter, Instagram, MapPin, Phone, Mail } from "lucide-react";
+import { MapPin, Phone, Mail } from "lucide-react";
 import "./Footer.css";
 
 export default function Footer() {
@@ -9,11 +9,6 @@ export default function Footer() {
         <div className="footer-brand">
           <h2>The Furniture Store UG</h2>
           <p>Elevating Ugandan homes with premium, handcrafted furniture. Quality that lasts a lifetime.</p>
-          <div className="social-links">
-            <a href="#" aria-label="Facebook"><Facebook size={20} /></a>
-            <a href="#" aria-label="Twitter"><Twitter size={20} /></a>
-            <a href="#" aria-label="Instagram"><Instagram size={20} /></a>
-          </div>
         </div>
         
         <div className="footer-links">
