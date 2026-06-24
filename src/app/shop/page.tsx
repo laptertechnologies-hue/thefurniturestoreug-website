@@ -49,51 +49,52 @@ export default async function Shop() {
         ) : (
           <div className="shop-grid">
             {products.map((product, index) => (
-              <Link 
-                href={`/product/${product.id}`} 
+              <div 
                 key={product.id} 
                 className="product-card animate-fade-in-up"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
-                <div className="product-image">
-                  {product.images && product.images[0] ? (
-                    <img src={product.images[0]} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                  ) : (
-                    <div className="img-placeholder">No Image</div>
-                  )}
-                  {product.discountPrice && (
-                    <div className="product-badge sale">Sale</div>
-                  )}
-                </div>
-                <div className="product-info">
-                  <span className="product-category">{product.category?.name || "Uncategorized"}</span>
-                  <h3 className="product-name">{product.name}</h3>
-                  <div className="product-footer">
-                    <span className="product-price" style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                      {product.discountPrice ? (
-                        <>
-                          <span style={{ textDecoration: 'line-through', fontSize: '0.9rem', color: 'var(--color-brown-light)' }}>
-                            Ugx {product.price.toLocaleString()}
-                          </span>
-                          <span>Ugx {product.discountPrice.toLocaleString()}</span>
-                        </>
-                      ) : (
-                        <span>Ugx {product.price.toLocaleString()}</span>
-                      )}
-                    </span>
-                    <AddToCartButton 
-                      product={{
-                        id: product.id,
-                        name: product.name,
-                        price: product.price,
-                        discountPrice: product.discountPrice,
-                        image: product.images?.[0] || undefined,
-                        category: product.category?.name
-                      }} 
-                    />
+                <Link href={`/product/${product.id}`} style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
+                  <div className="product-image">
+                    {product.images && product.images[0] ? (
+                      <img src={product.images[0]} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    ) : (
+                      <div className="img-placeholder">No Image</div>
+                    )}
+                    {product.discountPrice && (
+                      <div className="product-badge sale">Sale</div>
+                    )}
                   </div>
+                  <div className="product-info-top" style={{ padding: '16px 16px 8px 16px' }}>
+                    <span className="product-category">{product.category?.name || "Uncategorized"}</span>
+                    <h3 className="product-name">{product.name}</h3>
+                  </div>
+                </Link>
+                <div className="product-footer" style={{ padding: '0 16px 16px 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span className="product-price" style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                    {product.discountPrice ? (
+                      <>
+                        <span style={{ textDecoration: 'line-through', fontSize: '0.85rem', color: 'var(--color-brown-light)' }}>
+                          Ugx {product.price.toLocaleString()}
+                        </span>
+                        <span>Ugx {product.discountPrice.toLocaleString()}</span>
+                      </>
+                    ) : (
+                      <span>Ugx {product.price.toLocaleString()}</span>
+                    )}
+                  </span>
+                  <AddToCartButton 
+                    product={{
+                      id: product.id,
+                      name: product.name,
+                      price: product.price,
+                      discountPrice: product.discountPrice,
+                      image: product.images?.[0] || undefined,
+                      category: product.category?.name
+                    }} 
+                  />
                 </div>
-              </Link>
+              </div>
             ))}
           </div>
         )}

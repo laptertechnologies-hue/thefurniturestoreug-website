@@ -25,22 +25,22 @@ export default async function Categories() {
           </div>
         ) : (
           <div className="shop-grid">
-            {categories.map((cat) => (
-              <Link href={`/category/${cat.id}`} key={cat.id} className="product-card">
-                <div className="product-image" style={{ aspectRatio: '16/9' }}>
+            {categories.map((cat, index) => (
+              <Link href={`/category/${cat.id}`} key={cat.id} className="product-card animate-fade-in-up" style={{ animationDelay: `${index * 0.1}s` }}>
+                <div className="product-image">
                   {cat.image ? (
                     <img src={cat.image} alt={cat.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                   ) : (
                     <div className="img-placeholder">{cat.name} Image</div>
                   )}
                 </div>
-                <div className="product-info">
+                <div className="product-info-top" style={{ padding: '16px 16px 12px 16px' }}>
                   <h3 className="product-name">{cat.name}</h3>
-                  <p style={{ color: 'var(--color-brown-light)', fontSize: '0.9rem', marginBottom: '16px' }}>
+                  <p style={{ color: 'var(--color-brown-light)', fontSize: '0.85rem', marginBottom: '8px', marginTop: '4px' }}>
                     {cat.description || "Explore this collection"}
                   </p>
-                  <span className="link-arrow" style={{ fontSize: '0.9rem' }}>
-                    View Category <ArrowRight size={16} />
+                  <span className="link-arrow" style={{ fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '4px', color: 'var(--color-brown-dark)', fontWeight: '600' }}>
+                    View Category <ArrowRight size={14} />
                   </span>
                 </div>
               </Link>

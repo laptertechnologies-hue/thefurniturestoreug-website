@@ -12,7 +12,7 @@ export default function Navbar() {
   return (
     <header className="navbar glass">
       <div className="container nav-container">
-        <Link href="/" className="logo">
+        <Link href="/" className="logo" onClick={() => setIsOpen(false)}>
           <span className="logo-icon"><ShoppingBag size={24} /></span>
           <span className="logo-text">The Furniture Store UG</span>
         </Link>
@@ -26,23 +26,23 @@ export default function Navbar() {
         </nav>
 
         <div className="nav-actions">
-          <Link href="/cart" className="icon-btn">
+          <Link href="/cart" className="icon-btn" onClick={() => setIsOpen(false)}>
             <ShoppingBag size={20} />
           </Link>
           {session ? (
             <>
               {/* @ts-ignore */}
               {session.user?.role === 'ADMIN' && (
-                <Link href="/admin" className="icon-btn" title="Admin Dashboard">
+                <Link href="/admin" className="icon-btn" title="Admin Dashboard" onClick={() => setIsOpen(false)}>
                   <span style={{ fontSize: '0.8rem', fontWeight: 600 }}>Admin</span>
                 </Link>
               )}
-              <Link href="/profile" className="icon-btn" title="My Profile">
+              <Link href="/profile" className="icon-btn" title="My Profile" onClick={() => setIsOpen(false)}>
                 <User size={20} />
               </Link>
             </>
           ) : (
-            <Link href="/login" className="icon-btn" title="Sign In">
+            <Link href="/login" className="icon-btn" title="Sign In" onClick={() => setIsOpen(false)}>
               <User size={20} />
             </Link>
           )}
