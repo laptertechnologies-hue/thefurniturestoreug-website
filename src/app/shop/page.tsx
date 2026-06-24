@@ -17,8 +17,10 @@ export default async function Shop() {
 
   return (
     <div className="shop-wrapper">
-      <HeroSlider slides={slides} />
       <div className="container">
+        <div style={{ marginBottom: '40px' }}>
+          <HeroSlider slides={slides} />
+        </div>
         <header className="page-header">
           <h1>All Products</h1>
           <p className="subtitle">Discover our complete collection of premium furniture.</p>
