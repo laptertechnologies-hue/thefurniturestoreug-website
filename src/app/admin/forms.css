@@ -93,9 +93,30 @@
   align-items: center;
   justify-content: center;
   transition: all var(--transition-fast);
+  cursor: pointer;
+  border: none;
 }
 
 .btn-icon-danger:hover {
   background: var(--color-accent);
+  color: white;
+}
+
+.btn-icon-secondary {
+  color: var(--color-brown);
+  background: rgba(93, 64, 55, 0.1);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+  cursor: pointer;
+  border: none;
+}
+
+.btn-icon-secondary:hover {
+  background: var(--color-brown);
   color: white;
 }

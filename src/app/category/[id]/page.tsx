@@ -1,46 +1,47 @@
 import Link from "next/link";
-import { ArrowRight, ShoppingBag } from "lucide-react";
+import { ArrowRight, ShoppingBag, ArrowLeft } from "lucide-react";
 import { prisma } from "@/lib/prisma";
-import "./page.css";
+import { notFound } from "next/navigation";
+import "../../shop/page.css";
 
 export const dynamic = 'force-dynamic';
 
-export default async function Shop() {
-  const products = await prisma.product.findMany({
-    include: { category: true },
-    orderBy: { createdAt: 'desc' }
+export default async function CategoryPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  
+  const category = await prisma.category.findUnique({
+    where: { id },
+    include: {
+      products: {
+        orderBy: { createdAt: 'desc' }
+      }
+    }
   });
+
+  if (!category) {
+    notFound();
+  }
 
   return (
     <div className="shop-wrapper">
       <div className="container">
-        <header className="page-header">
-          <h1>All Products</h1>
-          <p className="subtitle">Discover our complete collection of premium furniture.</p>
+        <Link href="/categories" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', color: 'var(--color-brown-light)', marginBottom: '24px', fontWeight: 500 }}>
+          <ArrowLeft size={16} /> Back to Categories
+        </Link>
+        <header className="page-header" style={{ marginBottom: '40px' }}>
+          <h1>{category.name}</h1>
+          <p className="subtitle">{category.description || `Explore our collection of ${category.name} furniture.`}</p>
         </header>
 
-        <div className="shop-toolbar">
-          <div className="toolbar-left">
-            <span>Showing {products.length} products</span>
-          </div>
-          <div className="toolbar-right">
-            <select className="sort-select" defaultValue="newest">
-              <option value="newest">Sort by: Newest</option>
-              <option value="price-low">Price: Low to High</option>
-              <option value="price-high">Price: High to Low</option>
-            </select>
-          </div>
-        </div>
-
-        {products.length === 0 ? (
+        {category.products.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '60px 0', color: 'var(--color-brown-light)' }}>
             <ShoppingBag size={48} opacity={0.2} style={{ margin: '0 auto 16px' }} />
-            <h2>No products available right now.</h2>
-            <p>Please check back later or contact us for inquiries.</p>
+            <h2>No products in this category yet.</h2>
+            <p>Please check back later.</p>
           </div>
         ) : (
           <div className="shop-grid">
-            {products.map((product) => (
+            {category.products.map((product) => (
               <Link href={`/product/${product.id}`} key={product.id} className="product-card">
                 <div className="product-image">
                   {product.images && product.images[0] ? (
@@ -53,7 +54,6 @@ export default async function Shop() {
                   )}
                 </div>
                 <div className="product-info">
-                  <span className="product-category">{product.category?.name || "Uncategorized"}</span>
                   <h3 className="product-name">{product.name}</h3>
                   <div className="product-footer">
                     <span className="product-price" style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>

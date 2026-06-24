@@ -17,8 +17,8 @@ export default function Contact() {
               <div className="info-icon"><Phone size={24} /></div>
               <div>
                 <h3>Phone Numbers</h3>
-                <p>+256 701 197 245</p>
-                <p>+256 782 700 470</p>
+                <p>0765245921</p>
+                <p>0701079360</p>
               </div>
             </div>
 
@@ -26,7 +26,7 @@ export default function Contact() {
               <div className="info-icon"><Mail size={24} /></div>
               <div>
                 <h3>Email Address</h3>
-                <p>info@thefurniturestoreug.com</p>
+                <p>princehenrykimbugwe8@gmail.com</p>
               </div>
             </div>
 

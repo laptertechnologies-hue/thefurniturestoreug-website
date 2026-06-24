@@ -186,9 +186,99 @@
   background-color: var(--color-cream-dark);
   border-radius: var(--border-radius-sm);
   margin-bottom: 16px;
+  padding: 24px;
 }
 
 .category-card h3 {
-  font-size: 1.125rem;
+  font-size: 1.25rem;
   color: var(--color-brown-dark);
+}
+
+/* Testimonials Section */
+.testimonials-section {
+  padding: 80px 0;
+  background-color: var(--color-cream);
+  border-top: 1px solid var(--border-color);
+}
+
+.section-header.center {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.section-header.center p {
+  color: var(--color-brown-light);
+  margin-top: 16px;
+  max-width: 600px;
+}
+
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 30px;
+  margin-top: 40px;
+}
+
+@media (min-width: 768px) {
+  .testimonials-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.testimonial-card {
+  background: white;
+  padding: 32px;
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color);
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+.testimonial-card:hover {
+  transform: translateY(-5px);
+}
+
+.quote-icon {
+  color: rgba(216, 67, 21, 0.1);
+  position: absolute;
+  top: 24px;
+  right: 24px;
+}
+
+.testimonial-card .rating {
+  margin-bottom: 16px;
+  display: flex;
+  gap: 4px;
+}
+
+.review-text {
+  font-size: 1.1rem;
+  color: var(--color-brown-dark);
+  line-height: 1.6;
+  font-style: italic;
+  margin-bottom: 24px;
+}
+
+.reviewer-info h4 {
+  font-size: 1rem;
+  color: var(--color-brown);
+  font-weight: 700;
+}
+
+.reviewer-info span {
+  font-size: 0.875rem;
+  color: var(--color-brown-light);
+}
+
+.no-testimonials {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: var(--color-brown-light);
+  padding: 40px;
+  background: white;
+  border-radius: var(--border-radius-md);
 }

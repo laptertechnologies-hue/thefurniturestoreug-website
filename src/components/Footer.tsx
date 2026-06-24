@@ -1,23 +1,18 @@
 import Link from "next/link";
-import { ShoppingBag, Mail, Phone, MapPin } from "lucide-react";
+import { Facebook, Twitter, Instagram, MapPin, Phone, Mail } from "lucide-react";
 import "./Footer.css";
 
 export default function Footer() {
   return (
     <footer className="footer">
-      <div className="container footer-container">
+      <div className="container footer-content">
         <div className="footer-brand">
-          <Link href="/" className="logo">
-            <span className="logo-icon"><ShoppingBag size={24} /></span>
-            <span className="logo-text">The Furniture Store UG</span>
-          </Link>
-          <p className="footer-description">
-            Premium handcrafted furniture designed for modern living. Elevate your space with our exclusive collections.
-          </p>
+          <h2>The Furniture Store UG</h2>
+          <p>Elevating Ugandan homes with premium, handcrafted furniture. Quality that lasts a lifetime.</p>
           <div className="social-links">
-            <a href="#" className="social-link"><Mail size={20} /></a>
-            <a href="#" className="social-link"><Phone size={20} /></a>
-            <a href="#" className="social-link"><MapPin size={20} /></a>
+            <a href="#" aria-label="Facebook"><Facebook size={20} /></a>
+            <a href="#" aria-label="Twitter"><Twitter size={20} /></a>
+            <a href="#" aria-label="Instagram"><Instagram size={20} /></a>
           </div>
         </div>
         
@@ -25,16 +20,30 @@ export default function Footer() {
           <div className="link-group">
             <h3>Shop</h3>
             <Link href="/categories">All Categories</Link>
-            <Link href="/category/living-room">Living Room</Link>
-            <Link href="/category/bedroom">Bedroom</Link>
-            <Link href="/category/dining">Dining</Link>
+            <Link href="/shop">All Products</Link>
           </div>
           <div className="link-group">
             <h3>Company</h3>
             <Link href="/about">About Us</Link>
             <Link href="/contact">Contact</Link>
-            <Link href="/faq">FAQ</Link>
-            <Link href="/admin">Admin Dashboard</Link>
+            <Link href="/login">Account</Link>
+          </div>
+          <div className="link-group">
+            <h3>Get In Touch</h3>
+            <ul>
+              <li style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', marginBottom: '12px' }}>
+                <MapPin size={18} style={{ flexShrink: 0, marginTop: '4px' }} />
+                <span>Kampala, Uganda</span>
+              </li>
+              <li style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
+                <Phone size={18} />
+                <span>0765245921 / 0701079360</span>
+              </li>
+              <li style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <Mail size={18} />
+                <span>princehenrykimbugwe8@gmail.com</span>
+              </li>
+            </ul>
           </div>
         </div>
       </div>
