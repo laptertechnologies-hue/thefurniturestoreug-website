@@ -1,42 +1,31 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Trash2, ArrowRight, ShoppingBag, Plus, Minus } from "lucide-react";
+import { useCartStore } from "@/store/cartStore";
 import "./page.css";
 
-// Temporary mock cart items
-const initialCart = [
-  { id: 1, name: "Modern Leather Sofa", price: 1200000, quantity: 1, category: "Living Room" },
-  { id: 2, name: "Oak Dining Table", price: 850000, quantity: 1, category: "Dining" }
-];
-
 export default function Cart() {
-  const [cartItems, setCartItems] = useState(initialCart);
+  const [mounted, setMounted] = useState(false);
+  const cartItems = useCartStore((state) => state.items);
+  const updateQuantity = useCartStore((state) => state.updateQuantity);
+  const removeItem = useCartStore((state) => state.removeItem);
+  const subtotal = useCartStore((state) => state.getSubtotal());
+  
+  // Hydration fix for zustand persist
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
-  const updateQuantity = (id: number, delta: number) => {
-    setCartItems(items => 
-      items.map(item => {
-        if (item.id === id) {
-          const newQuantity = Math.max(1, item.quantity + delta);
-          return { ...item, quantity: newQuantity };
-        }
-        return item;
-      })
-    );
-  };
+  if (!mounted) return null; // Avoid hydration mismatch on first render
 
-  const removeItem = (id: number) => {
-    setCartItems(items => items.filter(item => item.id !== id));
-  };
-
-  const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
   const delivery = subtotal > 0 ? 50000 : 0; // Mock delivery fee Ugx 50,000
   const total = subtotal + delivery;
 
   if (cartItems.length === 0) {
     return (
-      <div className="cart-wrapper">
+      <div className="cart-wrapper animate-fade-in">
         <div className="container">
           <header className="page-header">
             <h1>Shopping Cart</h1>
@@ -55,7 +44,7 @@ export default function Cart() {
   }
 
   return (
-    <div className="cart-wrapper">
+    <div className="cart-wrapper animate-fade-in">
       <div className="container">
         <header className="page-header">
           <h1>Shopping Cart</h1>
@@ -65,13 +54,17 @@ export default function Cart() {
           {/* Cart Items List */}
           <div className="cart-items">
             {cartItems.map(item => (
-              <div key={item.id} className="cart-item">
+              <div key={item.id} className="cart-item animate-slide-in-left">
                 <div className="item-image">
-                  <div className="img-placeholder">Img</div>
+                  {item.image ? (
+                     <img src={item.image} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  ) : (
+                    <div className="img-placeholder">Img</div>
+                  )}
                 </div>
                 
                 <div className="item-details">
-                  <span className="item-category">{item.category}</span>
+                  <span className="item-category">{item.category || "Uncategorized"}</span>
                   <h3>{item.name}</h3>
                   <p className="item-price">Ugx {item.price.toLocaleString()}</p>
                 </div>
@@ -91,7 +84,7 @@ export default function Cart() {
           </div>
 
           {/* Cart Summary */}
-          <aside className="cart-summary">
+          <aside className="cart-summary animate-slide-in-right">
             <h3>Order Summary</h3>
             
             <div className="summary-row">
@@ -110,9 +103,9 @@ export default function Cart() {
               <span>Ugx {total.toLocaleString()}</span>
             </div>
 
-            <button className="btn-primary w-100 mt-4 checkout-btn">
+            <Link href="/checkout" className="btn-primary w-100 mt-4 checkout-btn" style={{ display: 'flex', justifyContent: 'center', gap: '8px' }}>
               Proceed to Checkout <ArrowRight size={20} />
-            </button>
+            </Link>
             
             <Link href="/shop" className="continue-shopping">
               Continue Shopping

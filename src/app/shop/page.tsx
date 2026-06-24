@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, ShoppingBag } from "lucide-react";
 import HeroSlider from "@/components/HeroSlider";
+import AddToCartButton from "@/components/AddToCartButton";
 import { prisma } from "@/lib/prisma";
 import "./page.css";
 
@@ -47,8 +48,13 @@ export default async function Shop() {
           </div>
         ) : (
           <div className="shop-grid">
-            {products.map((product) => (
-              <Link href={`/product/${product.id}`} key={product.id} className="product-card">
+            {products.map((product, index) => (
+              <Link 
+                href={`/product/${product.id}`} 
+                key={product.id} 
+                className="product-card animate-fade-in-up"
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
                 <div className="product-image">
                   {product.images && product.images[0] ? (
                     <img src={product.images[0]} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
@@ -75,9 +81,16 @@ export default async function Shop() {
                         <span>Ugx {product.price.toLocaleString()}</span>
                       )}
                     </span>
-                    <button className="add-to-cart-btn" aria-label="Add to cart">
-                      <ShoppingBag size={18} />
-                    </button>
+                    <AddToCartButton 
+                      product={{
+                        id: product.id,
+                        name: product.name,
+                        price: product.price,
+                        discountPrice: product.discountPrice,
+                        image: product.images?.[0] || undefined,
+                        category: product.category?.name
+                      }} 
+                    />
                   </div>
                 </div>
               </Link>

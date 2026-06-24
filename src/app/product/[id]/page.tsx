@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowLeft, ShoppingBag, Truck, ShieldCheck, Clock } from "lucide-react";
 import { prisma } from "@/lib/prisma";
+import AddToCartButton from "@/components/AddToCartButton";
 import { notFound } from "next/navigation";
 import "./page.css";
 
@@ -68,9 +69,18 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
             </div>
 
             <div className="product-actions">
-              <button className="btn-primary add-to-cart-large">
-                <ShoppingBag size={20} /> Add to Cart
-              </button>
+              <AddToCartButton 
+                product={{
+                  id: product.id,
+                  name: product.name,
+                  price: product.price,
+                  discountPrice: product.discountPrice,
+                  image: product.images?.[0] || undefined,
+                  category: product.category?.name
+                }} 
+                className="btn-primary add-to-cart-large"
+                showText={true}
+              />
             </div>
 
             <div className="product-features">
