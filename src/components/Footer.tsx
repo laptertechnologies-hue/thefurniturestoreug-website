@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ShoppingBag, Instagram, Facebook, Youtube } from "lucide-react";
+import { ShoppingBag, Mail, Phone, MapPin } from "lucide-react";
 import "./Footer.css";
 
 export default function Footer() {
@@ -15,9 +15,9 @@ export default function Footer() {
             Premium handcrafted furniture designed for modern living. Elevate your space with our exclusive collections.
           </p>
           <div className="social-links">
-            <a href="#" className="social-link"><Instagram size={20} /></a>
-            <a href="#" className="social-link"><Facebook size={20} /></a>
-            <a href="#" className="social-link"><Youtube size={20} /></a>
+            <a href="#" className="social-link"><Mail size={20} /></a>
+            <a href="#" className="social-link"><Phone size={20} /></a>
+            <a href="#" className="social-link"><MapPin size={20} /></a>
           </div>
         </div>
         
