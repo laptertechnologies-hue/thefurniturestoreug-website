@@ -4,6 +4,23 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import nodemailer from 'nodemailer';
 
+export async function GET(req: Request) {
+  try {
+    const session = await getServerSession(authOptions);
+    // @ts-ignore
+    if (!session || session.user?.role !== 'ADMIN') {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+    const orders = await prisma.order.findMany({
+      include: { orderItems: { include: { product: true } } },
+      orderBy: { createdAt: 'desc' }
+    });
+    return NextResponse.json(orders);
+  } catch (error) {
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+  }
+}
+
 export async function POST(req: Request) {
   try {
     const session = await getServerSession(authOptions);

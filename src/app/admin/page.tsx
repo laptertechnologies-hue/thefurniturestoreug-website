@@ -16,6 +16,7 @@ export default function AdminDashboard() {
   const [products, setProducts] = useState<any[]>([]);
   const [slides, setSlides] = useState<any[]>([]);
   const [testimonials, setTestimonials] = useState<any[]>([]);
+  const [orders, setOrders] = useState<any[]>([]);
   
   // Category Form
   const [newCatName, setNewCatName] = useState("");
@@ -68,7 +69,13 @@ export default function AdminDashboard() {
     fetchProducts();
     fetchSlides();
     fetchTestimonials();
+    fetchOrders();
     fetchSettings();
+  };
+
+  const fetchOrders = async () => {
+    const res = await fetch("/api/orders");
+    if (res.ok) setOrders(await res.json());
   };
 
   const fetchSettings = async () => {
@@ -292,7 +299,7 @@ export default function AdminDashboard() {
             <div className="stats-grid">
               <div className="stat-card">
                 <div className="stat-icon"><ShoppingBag size={24} /></div>
-                <div className="stat-details"><h3>Total Orders</h3><p>0</p></div>
+                <div className="stat-details"><h3>Total Orders</h3><p>{orders.length}</p></div>
               </div>
               <div className="stat-card">
                 <div className="stat-icon"><Package size={24} /></div>
@@ -491,9 +498,30 @@ export default function AdminDashboard() {
         {activeTab === 'orders' && (
           <div className="admin-products animate-fade-in-up">
             <div className="tab-header"><h2>Manage Orders</h2></div>
-            <div className="empty-state">
-              <ShoppingBag size={48} opacity={0.2} />
-              <p>No orders yet.</p>
+            <div className="data-table-container">
+              <table className="data-table">
+                <thead><tr><th>Order ID</th><th>Customer</th><th>Amount</th><th>Status</th><th>Date</th></tr></thead>
+                <tbody>
+                  {orders.map(o => (
+                    <tr key={o.id}>
+                      <td style={{fontFamily: 'monospace'}}>{o.id.substring(o.id.length - 6).toUpperCase()}</td>
+                      <td>{o.customerName}<br/><small style={{color: 'var(--color-brown-light)'}}>{o.customerPhone}</small></td>
+                      <td>Ugx {o.totalAmount.toLocaleString()}</td>
+                      <td>
+                        <span style={{
+                          padding: '4px 8px', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 600,
+                          backgroundColor: o.status === 'PENDING' ? '#fff3cd' : '#d1e7dd',
+                          color: o.status === 'PENDING' ? '#856404' : '#0f5132'
+                        }}>
+                          {o.status}
+                        </span>
+                      </td>
+                      <td>{new Date(o.createdAt).toLocaleDateString()}</td>
+                    </tr>
+                  ))}
+                  {orders.length === 0 && <tr><td colSpan={5}>No orders found</td></tr>}
+                </tbody>
+              </table>
             </div>
           </div>
         )}
