@@ -28,7 +28,7 @@ export default async function Shop() {
 
         <div className="shop-toolbar">
           <div className="toolbar-left">
-            <span>Showing {products.length} products</span>
+            <span>Showing products</span>
           </div>
           <div className="toolbar-right">
             <select className="sort-select" defaultValue="newest">
