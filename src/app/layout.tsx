@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
+import Navbar from "@/components/Navbar";
 import "./globals.css";
 
 const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit" });
@@ -9,6 +10,8 @@ export const metadata: Metadata = {
   description: "Premium Furniture for Your Home. Order online today.",
 };
 
+import Footer from "@/components/Footer";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -17,9 +20,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={outfit.className}>
-        {/* We will add Navbar here */}
-        <main>{children}</main>
-        {/* We will add Footer here */}
+        <Navbar />
+        <main style={{ paddingTop: '70px', minHeight: 'calc(100vh - 70px)' }}>{children}</main>
+        <Footer />
       </body>
     </html>
   );
