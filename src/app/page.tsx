@@ -8,16 +8,54 @@ export const dynamic = 'force-dynamic';
 
 export default async function Home() {
   // Fetch data dynamically
-  const [slides, categories, testimonials] = await Promise.all([
-    prisma.slide.findMany({ orderBy: { createdAt: 'desc' } }),
+  const [categories, testimonials] = await Promise.all([
     prisma.category.findMany({ take: 4, orderBy: { name: 'asc' } }),
     prisma.testimonial.findMany({ take: 6, orderBy: { createdAt: 'desc' } })
   ]);
 
   return (
     <div className="home-wrapper">
-      {/* Dynamic Hero Slider */}
-      <HeroSlider slides={slides} />
+      {/* Hero Section */}
+      <section className="hero">
+        <div className="container hero-container">
+          <div className="hero-content animate-slide-in-left">
+            <span className="badge">Premium Quality</span>
+            <h1 className="hero-title">
+              Elevate Your Space with <span>Timeless Furniture</span>
+            </h1>
+            <p className="hero-subtitle">
+              Discover our curated collection of handcrafted furniture designed to bring comfort, style, and durability to your home.
+            </p>
+            <div className="hero-actions">
+              <Link href="/shop" className="btn-primary">
+                Shop Collection <ArrowRight size={20} />
+              </Link>
+              <Link href="/about" className="btn-secondary">
+                Our Story
+              </Link>
+            </div>
+          </div>
+          
+          <div className="hero-image-wrapper animate-fade-in-up">
+            <div className="hero-image-placeholder">
+              <img src="/hero.png" alt="Premium Furniture" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            </div>
+            
+            {/* Floating Glass Card */}
+            <div className="floating-card glass">
+              <div className="rating">
+                <Star size={16} fill="var(--color-accent)" color="var(--color-accent)" />
+                <Star size={16} fill="var(--color-accent)" color="var(--color-accent)" />
+                <Star size={16} fill="var(--color-accent)" color="var(--color-accent)" />
+                <Star size={16} fill="var(--color-accent)" color="var(--color-accent)" />
+                <Star size={16} fill="var(--color-accent)" color="var(--color-accent)" />
+              </div>
+              <p className="review">"Absolutely stunning craftsmanship. Transformed my living room!"</p>
+              <p className="reviewer">- Sarah M.</p>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Featured Categories (Preview) */}
       <section className="categories-preview">

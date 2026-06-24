@@ -1,18 +1,23 @@
 import Link from "next/link";
 import { ArrowRight, ShoppingBag } from "lucide-react";
+import HeroSlider from "@/components/HeroSlider";
 import { prisma } from "@/lib/prisma";
 import "./page.css";
 
 export const dynamic = 'force-dynamic';
 
 export default async function Shop() {
-  const products = await prisma.product.findMany({
-    include: { category: true },
-    orderBy: { createdAt: 'desc' }
-  });
+  const [products, slides] = await Promise.all([
+    prisma.product.findMany({
+      include: { category: true },
+      orderBy: { createdAt: 'desc' }
+    }),
+    prisma.slide.findMany({ orderBy: { createdAt: 'desc' } })
+  ]);
 
   return (
     <div className="shop-wrapper">
+      <HeroSlider slides={slides} />
       <div className="container">
         <header className="page-header">
           <h1>All Products</h1>
