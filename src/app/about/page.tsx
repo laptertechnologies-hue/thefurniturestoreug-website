@@ -17,7 +17,7 @@ export default function About() {
               We have ready to take furniture and we also make on orders. Looking for Sofa sets, Dining Tables, Beds, Cushions, Center tables, Carpets, you are in the right place.
             </p>
             <p>
-              With Innovation and continuous search for better materials, the furniture workshop delivers unparalleled quality furniture for your home and office including Sofa sets, beds, dining tables, office and outdoor furniture. Check out for yourself our quality furniture at any of our showrooms.
+              With Innovation and continuous search for better materials, The Furniture Store delivers unparalleled quality furniture for your home and office including Sofa sets, beds, dining tables, office and outdoor furniture. Check out for yourself our quality furniture at any of our showrooms.
             </p>
             <Link href="/shop" className="btn-primary mt-4">
               Shop Now
