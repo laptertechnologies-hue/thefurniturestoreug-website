@@ -3,11 +3,21 @@ import Link from "next/link";
 import { useState } from "react";
 import { ShoppingBag, Menu, X, User, LogOut } from "lucide-react";
 import { useSession, signOut } from "next-auth/react";
+import { useCartStore } from "@/store/cartStore";
+import { useEffect } from "react";
 import "./Navbar.css";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const { data: session } = useSession();
+  
+  const cartItems = useCartStore((state) => state.items);
+  const cartItemCount = cartItems.reduce((total, item) => total + item.quantity, 0);
+
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <header className="navbar glass">
@@ -26,8 +36,11 @@ export default function Navbar() {
         </nav>
 
         <div className="nav-actions">
-          <Link href="/cart" className="icon-btn" onClick={() => setIsOpen(false)}>
+          <Link href="/cart" className="icon-btn cart-btn" onClick={() => setIsOpen(false)}>
             <ShoppingBag size={20} />
+            {mounted && cartItemCount > 0 && (
+              <span className="cart-badge">{cartItemCount}</span>
+            )}
           </Link>
           {session ? (
             <>
