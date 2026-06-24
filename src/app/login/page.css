@@ -1,0 +1,221 @@
+/* Login Page Styles */
+.login-wrapper {
+  min-height: calc(100vh - 70px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+  background-color: var(--color-cream-dark);
+}
+
+.login-container {
+  width: 100%;
+  max-width: 1000px;
+  background: var(--color-cream);
+  border-radius: var(--border-radius-xl);
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1fr;
+  box-shadow: var(--shadow-xl);
+  border: 1px solid var(--border-color);
+}
+
+@media (min-width: 768px) {
+  .login-container {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.login-branding {
+  background: linear-gradient(135deg, var(--color-brown) 0%, var(--color-brown-dark) 100%);
+  color: var(--color-cream);
+  padding: 60px 40px;
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .login-branding {
+    display: flex;
+  }
+}
+
+.login-branding::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 70%);
+}
+
+.branding-content {
+  position: relative;
+  z-index: 1;
+}
+
+.logo-icon-large {
+  background: rgba(255, 255, 255, 0.1);
+  width: 80px;
+  height: 80px;
+  border-radius: var(--border-radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 30px;
+  backdrop-filter: blur(10px);
+}
+
+.login-branding h2 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  line-height: 1.2;
+}
+
+.login-branding p {
+  color: #c7bca7;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.login-form-container {
+  padding: 60px 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.login-header {
+  margin-bottom: 30px;
+}
+
+.login-header h1 {
+  font-size: 2rem;
+  color: var(--color-brown-dark);
+  margin-bottom: 8px;
+}
+
+.login-header p {
+  color: var(--color-brown-light);
+}
+
+.login-header a {
+  color: var(--color-accent);
+  font-weight: 600;
+}
+
+.btn-google {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  padding: 14px;
+  border-radius: var(--border-radius-lg);
+  border: 1px solid var(--border-color);
+  background: var(--color-cream);
+  color: var(--color-brown-dark);
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all var(--transition-fast);
+  margin-bottom: 24px;
+}
+
+.btn-google:hover {
+  background: var(--color-cream-dark);
+  border-color: var(--color-brown-light);
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.divider span {
+  padding: 0 16px;
+  color: var(--color-brown-light);
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.form-group {
+  margin-bottom: 24px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--color-brown-dark);
+}
+
+.input-with-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon {
+  position: absolute;
+  left: 16px;
+  color: var(--color-brown-light);
+}
+
+.input-with-icon input {
+  width: 100%;
+  padding: 14px 16px 14px 48px;
+  border-radius: var(--border-radius-lg);
+  border: 1px solid var(--border-color);
+  background: var(--color-cream);
+  font-family: inherit;
+  font-size: 1rem;
+  color: var(--color-brown-dark);
+  transition: all var(--transition-fast);
+}
+
+.input-with-icon input:focus {
+  outline: none;
+  border-color: var(--color-brown);
+  box-shadow: 0 0 0 3px rgba(93, 64, 55, 0.1);
+}
+
+.forgot-password {
+  text-align: right;
+  margin-top: 8px;
+  font-size: 0.875rem;
+}
+
+.forgot-password a {
+  color: var(--color-brown);
+  font-weight: 500;
+}
+
+.login-btn {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.error-message {
+  background-color: rgba(216, 67, 21, 0.1);
+  color: var(--color-accent);
+  padding: 12px;
+  border-radius: var(--border-radius-md);
+  margin-bottom: 20px;
+  font-size: 0.875rem;
+  text-align: center;
+  font-weight: 500;
+}

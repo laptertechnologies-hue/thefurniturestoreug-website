@@ -11,6 +11,7 @@ export const metadata: Metadata = {
 };
 
 import Footer from "@/components/Footer";
+import { Providers } from "@/components/Providers";
 
 export default function RootLayout({
   children,
@@ -20,9 +21,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={outfit.className}>
-        <Navbar />
-        <main style={{ paddingTop: '70px', minHeight: 'calc(100vh - 70px)' }}>{children}</main>
-        <Footer />
+        <Providers>
+          <Navbar />
+          <main style={{ paddingTop: '70px', minHeight: 'calc(100vh - 70px)' }}>{children}</main>
+          <Footer />
+        </Providers>
       </body>
     </html>
   );
