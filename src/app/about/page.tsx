@@ -1,9 +1,17 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Award, Layers, PenTool, Truck } from "lucide-react";
+import { prisma } from "@/lib/prisma";
 import "./page.css";
 
-export default function About() {
+export const dynamic = 'force-dynamic';
+
+export default async function About() {
+  const showroomSetting = await prisma.siteSetting.findUnique({
+    where: { key: "about_showroom_image" }
+  });
+  const showroomImage = showroomSetting?.value;
+
   return (
     <div className="about-wrapper">
       <div className="container">
@@ -24,10 +32,13 @@ export default function About() {
             </Link>
           </div>
           <div className="about-image">
-            {/* Placeholder for the sofa image from the user's reference */}
-            <div className="placeholder-image">
-               <span style={{color: 'var(--color-brown)'}}>Showroom Image</span>
-            </div>
+            {showroomImage ? (
+              <img src={showroomImage} alt="The Furniture Store Showroom" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '16px' }} />
+            ) : (
+              <div className="placeholder-image">
+                <span style={{color: 'var(--color-brown)'}}>Showroom Image</span>
+              </div>
+            )}
           </div>
         </section>
 

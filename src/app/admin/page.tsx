@@ -45,6 +45,10 @@ export default function AdminDashboard() {
   const [newTestContent, setNewTestContent] = useState("");
   const [newTestRating, setNewTestRating] = useState("5");
 
+  // Settings Form
+  const [aboutImage, setAboutImage] = useState("");
+  const [isSavingSettings, setIsSavingSettings] = useState(false);
+
   useEffect(() => {
     // @ts-ignore
     if (status === "unauthenticated" || (session && session.user?.role !== "ADMIN")) {
@@ -64,6 +68,15 @@ export default function AdminDashboard() {
     fetchProducts();
     fetchSlides();
     fetchTestimonials();
+    fetchSettings();
+  };
+
+  const fetchSettings = async () => {
+    const res = await fetch("/api/settings?key=about_showroom_image");
+    if (res.ok) {
+      const data = await res.json();
+      if (data.value) setAboutImage(data.value);
+    }
   };
 
   const fetchCategories = async () => {
@@ -219,6 +232,23 @@ export default function AdminDashboard() {
     if (res.ok) fetchTestimonials();
   };
 
+  // SETTINGS LOGIC
+  const handleSaveSettings = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSavingSettings(true);
+    const res = await fetch("/api/settings", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ key: "about_showroom_image", value: aboutImage })
+    });
+    if (res.ok) {
+      alert("Settings saved successfully!");
+    } else {
+      alert("Failed to save settings");
+    }
+    setIsSavingSettings(false);
+  };
+
   if (status === "loading") {
     return <div className="admin-loading">Loading Dashboard...</div>;
   }
@@ -247,6 +277,7 @@ export default function AdminDashboard() {
           <button className={`admin-nav-item ${activeTab === 'products' ? 'active' : ''}`} onClick={() => setActiveTab('products')}><Package size={20} /> Products</button>
           <button className={`admin-nav-item ${activeTab === 'testimonials' ? 'active' : ''}`} onClick={() => setActiveTab('testimonials')}><MessageSquare size={20} /> Testimonials</button>
           <button className={`admin-nav-item ${activeTab === 'orders' ? 'active' : ''}`} onClick={() => setActiveTab('orders')}><ShoppingBag size={20} /> Orders</button>
+          <button className={`admin-nav-item ${activeTab === 'settings' ? 'active' : ''}`} onClick={() => setActiveTab('settings')}><Settings size={20} /> Settings</button>
         </nav>
       </aside>
 
@@ -463,6 +494,24 @@ export default function AdminDashboard() {
             <div className="empty-state">
               <ShoppingBag size={48} opacity={0.2} />
               <p>No orders yet.</p>
+            </div>
+          </div>
+        )}
+
+        {/* SETTINGS TAB */}
+        {activeTab === 'settings' && (
+          <div className="admin-products animate-fade-in-up">
+            <div className="tab-header"><h2>Site Settings</h2></div>
+            <div className="admin-form-card">
+              <h3>About Us Page</h3>
+              <form onSubmit={handleSaveSettings} className="admin-form">
+                <div className="form-group">
+                  <label>Showroom Image (Displayed on About Us page)</label>
+                  <input type="file" accept="image/*" onChange={(e) => handleImageUpload(e, setAboutImage)} />
+                  {aboutImage && <img src={aboutImage} style={{height: 120, marginTop: 10, borderRadius: 8, objectFit: 'cover'}} alt="preview" />}
+                </div>
+                <button type="submit" className="btn-primary" disabled={isSavingSettings}>{isSavingSettings ? "Saving..." : "Save Settings"}</button>
+              </form>
             </div>
           </div>
         )}
