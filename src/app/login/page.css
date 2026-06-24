@@ -90,7 +90,7 @@
 }
 
 .login-header {
-  margin-bottom: 20px;
+  margin-bottom: 12px;
 }
 
 .login-header h1 {
@@ -122,7 +122,7 @@
   font-weight: 600;
   font-size: 1rem;
   transition: all var(--transition-fast);
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
 .btn-google:hover {
@@ -134,7 +134,7 @@
   display: flex;
   align-items: center;
   text-align: center;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
 .divider::before,
@@ -153,13 +153,13 @@
 }
 
 .form-group {
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
 .form-group label {
   display: block;
   font-weight: 600;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
   color: var(--color-brown-dark);
 }
 
@@ -177,7 +177,7 @@
 
 .input-with-icon input {
   width: 100%;
-  padding: 12px 16px 12px 44px;
+  padding: 14px 16px 14px 48px;
   border-radius: var(--border-radius-lg);
   border: 1px solid var(--border-color);
   background: var(--color-cream);
@@ -206,7 +206,7 @@
 
 .login-btn {
   width: 100%;
-  margin-top: 10px;
+  margin-top: 4px;
 }
 
 .error-message {
