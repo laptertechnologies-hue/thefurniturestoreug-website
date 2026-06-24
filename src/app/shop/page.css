@@ -153,13 +153,13 @@
 .product-name {
   font-size: 0.95rem;
   color: var(--color-brown-dark);
-  margin: 6px 0;
+  margin: 4px 0;
 }
 
 @media (min-width: 768px) {
   .product-name {
     font-size: 1.125rem;
-    margin: 8px 0;
+    margin: 6px 0;
   }
 }
 

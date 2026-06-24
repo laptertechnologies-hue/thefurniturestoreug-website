@@ -65,12 +65,12 @@ export default async function Shop() {
                       <div className="product-badge sale">Sale</div>
                     )}
                   </div>
-                  <div className="product-info-top" style={{ padding: '16px 16px 8px 16px' }}>
+                  <div className="product-info-top" style={{ padding: '12px 12px 4px 12px' }}>
                     <span className="product-category">{product.category?.name || "Uncategorized"}</span>
                     <h3 className="product-name">{product.name}</h3>
                   </div>
                 </Link>
-                <div className="product-footer" style={{ padding: '0 16px 16px 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div className="product-footer" style={{ padding: '0 12px 12px 12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <span className="product-price" style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                     {product.discountPrice ? (
                       <>

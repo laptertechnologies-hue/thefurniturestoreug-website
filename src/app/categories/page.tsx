@@ -34,12 +34,12 @@ export default async function Categories() {
                     <div className="img-placeholder">{cat.name} Image</div>
                   )}
                 </div>
-                <div className="product-info-top" style={{ padding: '16px 16px 12px 16px' }}>
-                  <h3 className="product-name">{cat.name}</h3>
-                  <p style={{ color: 'var(--color-brown-light)', fontSize: '0.85rem', marginBottom: '8px', marginTop: '4px' }}>
+                <div className="product-info-top" style={{ padding: '12px' }}>
+                  <h3 className="product-name" style={{ margin: '0 0 2px 0' }}>{cat.name}</h3>
+                  <p style={{ color: 'var(--color-brown-light)', fontSize: '0.85rem', marginBottom: '6px', marginTop: '0' }}>
                     {cat.description || "Explore this collection"}
                   </p>
-                  <span className="link-arrow" style={{ fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '4px', color: 'var(--color-brown-dark)', fontWeight: '600' }}>
+                  <span className="link-arrow" style={{ fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '4px', color: 'var(--color-brown-dark)', fontWeight: '600' }}>
                     View Category <ArrowRight size={14} />
                   </span>
                 </div>
