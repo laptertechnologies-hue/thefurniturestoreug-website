@@ -41,18 +41,45 @@
 .slide-content {
   color: white;
   max-width: 600px;
+  position: relative;
+  z-index: 10;
 }
 
 .slide-content .hero-title {
   color: white;
   margin-top: 16px;
   text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+  font-size: 2.5rem; /* Smaller font size */
+  line-height: 1.2;
+}
+
+.slide-content .hero-title span {
+  color: white; /* Force white for Timeless Furniture */
+  display: block; /* Stack it nicely */
 }
 
 .slide-content .badge {
-  background-color: rgba(216, 67, 21, 0.9); /* Accent color */
+  background-color: var(--color-accent); /* Accent color */
   border: none;
   color: white;
+  font-weight: bold;
+}
+
+.slide-content .hero-actions {
+  margin-top: 24px;
+}
+
+.slide-content .btn-primary {
+  background-color: var(--color-accent); /* Bright orange/accent to pop against dark images */
+  color: white;
+  border: 2px solid var(--color-accent);
+  box-shadow: 0 4px 12px rgba(216, 67, 21, 0.3);
+}
+
+.slide-content .btn-primary:hover {
+  background-color: white;
+  color: var(--color-accent);
+  border-color: white;
 }
 
 .slider-btn {
