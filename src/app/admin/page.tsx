@@ -239,6 +239,24 @@ export default function AdminDashboard() {
     if (res.ok) fetchTestimonials();
   };
 
+  // ORDERS LOGIC
+  const handleUpdateOrderStatus = async (id: string, newStatus: string) => {
+    const res = await fetch(`/api/orders/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ status: newStatus })
+    });
+    if (res.ok) fetchOrders();
+    else alert("Failed to update order status");
+  };
+
+  const handleDeleteOrder = async (id: string) => {
+    if (!confirm("Are you sure you want to permanently delete this order?")) return;
+    const res = await fetch(`/api/orders/${id}`, { method: "DELETE" });
+    if (res.ok) fetchOrders();
+    else alert("Failed to delete order");
+  };
+
   // SETTINGS LOGIC
   const handleSaveSettings = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -500,7 +518,7 @@ export default function AdminDashboard() {
             <div className="tab-header"><h2>Manage Orders</h2></div>
             <div className="data-table-container">
               <table className="data-table">
-                <thead><tr><th>Order ID</th><th>Customer</th><th>Amount</th><th>Status</th><th>Date</th></tr></thead>
+                <thead><tr><th>Order ID</th><th>Customer</th><th>Amount</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
                 <tbody>
                   {orders.map(o => (
                     <tr key={o.id}>
@@ -508,18 +526,28 @@ export default function AdminDashboard() {
                       <td>{o.customerName}<br/><small style={{color: 'var(--color-brown-light)'}}>{o.customerPhone}</small></td>
                       <td>Ugx {o.totalAmount.toLocaleString()}</td>
                       <td>
-                        <span style={{
-                          padding: '4px 8px', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 600,
-                          backgroundColor: o.status === 'PENDING' ? '#fff3cd' : '#d1e7dd',
-                          color: o.status === 'PENDING' ? '#856404' : '#0f5132'
-                        }}>
-                          {o.status}
-                        </span>
+                        <select 
+                          value={o.status} 
+                          onChange={(e) => handleUpdateOrderStatus(o.id, e.target.value)}
+                          style={{
+                            padding: '4px 8px', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 600, border: 'none', cursor: 'pointer',
+                            backgroundColor: o.status === 'PENDING' ? '#fff3cd' : o.status === 'PROCESSED' ? '#cfe2ff' : o.status === 'COMPLETED' ? '#d1e7dd' : '#f8d7da',
+                            color: o.status === 'PENDING' ? '#856404' : o.status === 'PROCESSED' ? '#084298' : o.status === 'COMPLETED' ? '#0f5132' : '#842029'
+                          }}
+                        >
+                          <option value="PENDING">PENDING</option>
+                          <option value="PROCESSED">PROCESSED</option>
+                          <option value="COMPLETED">COMPLETED</option>
+                          <option value="CANCELLED">CANCELLED</option>
+                        </select>
                       </td>
                       <td>{new Date(o.createdAt).toLocaleDateString()}</td>
+                      <td>
+                        <button onClick={() => handleDeleteOrder(o.id)} className="btn-icon-danger" title="Delete Order"><Trash2 size={16} /></button>
+                      </td>
                     </tr>
                   ))}
-                  {orders.length === 0 && <tr><td colSpan={5}>No orders found</td></tr>}
+                  {orders.length === 0 && <tr><td colSpan={6}>No orders found</td></tr>}
                 </tbody>
               </table>
             </div>
