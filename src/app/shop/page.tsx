@@ -24,7 +24,7 @@ export default async function Shop() {
         </div>
         <header className="page-header">
           <h1>All Products</h1>
-          <p className="subtitle">Discover our complete collection of premium furniture.</p>
+          <p className="subtitle">Furnish your way with quality</p>
         </header>
 
         <div className="shop-toolbar">
