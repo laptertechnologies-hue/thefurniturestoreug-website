@@ -1,8 +1,15 @@
 /* Admin Dashboard Styles */
 .admin-layout {
   display: flex;
+  flex-direction: column;
   min-height: calc(100vh - 70px);
   background-color: var(--bg-secondary);
+}
+
+@media (min-width: 992px) {
+  .admin-layout {
+    flex-direction: row;
+  }
 }
 
 .admin-loading {
@@ -16,27 +23,36 @@
 
 /* Sidebar */
 .admin-sidebar {
-  width: 280px;
+  width: 100%;
   background-color: var(--color-cream);
-  border-right: 1px solid var(--border-color);
-  padding: 24px;
-  display: none;
+  border-bottom: 1px solid var(--border-color);
+  padding: 16px 24px;
+  display: flex;
   flex-direction: column;
 }
 
 @media (min-width: 992px) {
   .admin-sidebar {
-    display: flex;
+    width: 280px;
+    border-right: 1px solid var(--border-color);
+    border-bottom: none;
+    padding: 24px;
   }
 }
 
 .admin-user-profile {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding-bottom: 24px;
-  border-bottom: 1px solid var(--border-color);
-  margin-bottom: 24px;
+  display: none;
+}
+
+@media (min-width: 992px) {
+  .admin-user-profile {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 24px;
+  }
 }
 
 .avatar {
@@ -69,8 +85,25 @@
 
 .admin-nav {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+}
+.admin-nav::-webkit-scrollbar {
+  height: 4px;
+}
+.admin-nav::-webkit-scrollbar-thumb {
+  background: var(--color-brown-light);
+  border-radius: 4px;
+}
+
+@media (min-width: 992px) {
+  .admin-nav {
+    flex-direction: column;
+    overflow-x: visible;
+    padding-bottom: 0;
+  }
 }
 
 .admin-nav-item {
@@ -84,6 +117,7 @@
   font-weight: 500;
   text-align: left;
   transition: all var(--transition-fast);
+  white-space: nowrap;
 }
 
 .admin-nav-item:hover {
@@ -98,11 +132,23 @@
 /* Main Content */
 .admin-content {
   flex: 1;
-  padding: 32px 24px;
+  padding: 16px 24px;
+}
+
+@media (min-width: 992px) {
+  .admin-content {
+    padding: 32px 24px;
+  }
 }
 
 .admin-header {
-  margin-bottom: 32px;
+  margin-bottom: 16px;
+}
+
+@media (min-width: 992px) {
+  .admin-header {
+    margin-bottom: 32px;
+  }
 }
 
 .admin-header h1 {

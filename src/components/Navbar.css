@@ -25,6 +25,22 @@
   color: var(--color-brown-dark);
 }
 
+.logo-text {
+  white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+  .logo-text {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .logo-text {
+    display: none;
+  }
+}
+
 .logo-icon {
   background: var(--color-brown);
   color: var(--color-cream);
