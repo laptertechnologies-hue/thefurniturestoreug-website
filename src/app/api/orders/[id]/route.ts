@@ -3,7 +3,7 @@ import { prisma } from '@/lib/prisma';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 
-export async function PATCH(req: Request, { params }: { params: { id: string } }) {
+export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const session = await getServerSession(authOptions);
     // @ts-ignore
@@ -17,7 +17,7 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
       return NextResponse.json({ error: 'Status is required' }, { status: 400 });
     }
 
-    const orderId = params.id;
+    const { id: orderId } = await params;
     const updatedOrder = await prisma.order.update({
       where: { id: orderId },
       data: { status }
@@ -30,7 +30,7 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
   }
 }
 
-export async function DELETE(req: Request, { params }: { params: { id: string } }) {
+export async function DELETE(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const session = await getServerSession(authOptions);
     // @ts-ignore
@@ -38,7 +38,7 @@ export async function DELETE(req: Request, { params }: { params: { id: string } 
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const orderId = params.id;
+    const { id: orderId } = await params;
     await prisma.order.delete({
       where: { id: orderId }
     });
