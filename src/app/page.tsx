@@ -15,6 +15,17 @@ export default async function Home() {
 
   return (
     <div className="home-wrapper">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "name": "The Furniture Store Ug",
+            "url": "https://www.thefurniturestoreug.com/"
+          })
+        }}
+      />
       {/* Hero Section */}
       <section className="hero">
         <div className="container hero-container">

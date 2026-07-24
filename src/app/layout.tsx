@@ -11,6 +11,12 @@ export const metadata: Metadata = {
   verification: {
     google: "StK3D4UAvg0kiya0QJ0EHVLGlvgIXbzNtY5pj0i5b0A",
   },
+  openGraph: {
+    siteName: "The Furniture Store Ug",
+    title: "The Furniture Store UG",
+    description: "Premium Furniture for Your Home. Order online today.",
+    url: "https://www.thefurniturestoreug.com",
+  },
 };
 
 import Footer from "@/components/Footer";
