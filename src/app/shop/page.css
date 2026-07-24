@@ -42,6 +42,15 @@
   box-shadow: 0 4px 12px rgba(216, 67, 21, 0.15);
 }
 
+.shop-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
 .shop-filters {
   background: var(--color-cream);
   padding: 24px;
