@@ -23,7 +23,7 @@ export default function Navbar() {
     <header className="navbar glass">
       <div className="container nav-container">
         <Link href="/" className="logo" onClick={() => setIsOpen(false)}>
-          <img src="/logo.png" alt="The Furniture Store UG" style={{ height: '40px', objectFit: 'contain' }} />
+          <img src="/logo.png" alt="The Furniture Store UG" style={{ height: '64px', transform: 'scale(1.2)', transformOrigin: 'left center', objectFit: 'contain' }} />
         </Link>
 
         {/* Desktop Nav */}
