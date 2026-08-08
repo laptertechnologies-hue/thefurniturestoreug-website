@@ -35,7 +35,10 @@ export default function Footer() {
         
         {/* Column 1: Brand & Socials */}
         <div className="footer-col brand-col">
-          <img src="/logo.png" alt="The Furniture Store UG" style={{ height: '140px', objectFit: 'contain', marginBottom: '16px', marginLeft: '-12px' }} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
+            <img src="/logo.png" alt="Logo" style={{ height: '48px', objectFit: 'contain' }} />
+            <h2 style={{ margin: 0 }}>The Furniture Store UG</h2>
+          </div>
           <p>Elevating Ugandan homes with premium, handcrafted furniture. Quality that lasts a lifetime.</p>
           <div className="social-links">
             <a href="https://wa.me/message/XKPTWDCXAYGNB1" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><WhatsappIcon /></a>
