@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { prisma } from '@/lib/prisma';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
@@ -32,18 +33,35 @@ export async function POST(req: Request) {
     }
 
     const body = await req.json();
-    const { key, value } = body;
 
+    // Support batch saving { settings: { key1: val1, key2: val2 } }
+    if (body.settings && typeof body.settings === 'object') {
+      const entries = Object.entries(body.settings as Record<string, string>);
+      await Promise.all(
+        entries.map(([k, v]) =>
+          prisma.siteSetting.upsert({
+            where: { key: k },
+            update: { value: String(v ?? '') },
+            create: { key: k, value: String(v ?? '') }
+          })
+        )
+      );
+      revalidatePath('/', 'layout');
+      return NextResponse.json({ ok: true, count: entries.length });
+    }
+
+    const { key, value } = body;
     if (!key || value === undefined) {
       return NextResponse.json({ error: 'Key and value are required' }, { status: 400 });
     }
 
     const setting = await prisma.siteSetting.upsert({
       where: { key },
-      update: { value },
-      create: { key, value }
+      update: { value: String(value) },
+      create: { key, value: String(value) }
     });
 
+    revalidatePath('/', 'layout');
     return NextResponse.json(setting);
   } catch (error) {
     console.error('Failed to save setting:', error);

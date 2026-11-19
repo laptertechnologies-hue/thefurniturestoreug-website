@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { Award, Layers, PenTool, Truck } from "lucide-react";
 import { prisma } from "@/lib/prisma";
@@ -7,10 +6,23 @@ import "./page.css";
 export const dynamic = 'force-dynamic';
 
 export default async function About() {
-  const showroomSetting = await prisma.siteSetting.findUnique({
-    where: { key: "about_showroom_image" }
+  const settings = await prisma.siteSetting.findMany({
+    where: {
+      key: { in: ["about_showroom_image", "about_lead_text", "about_body_text"] }
+    }
   });
-  const showroomImage = showroomSetting?.value;
+  const map: Record<string, string> = {};
+  for (const s of settings) {
+    if (s.value) map[s.key] = s.value;
+  }
+
+  const showroomImage = map.about_showroom_image || "/hero.png";
+  const leadText =
+    map.about_lead_text ||
+    "We have ready to take furniture and we also make on orders. Looking for Sofa sets, Dining Tables, Beds, Cushions, Center tables, Carpets, you are in the right place.";
+  const bodyText =
+    map.about_body_text ||
+    "With Innovation and continuous search for better materials, The Furniture Store delivers unparalleled quality furniture for your home and office including Sofa sets, beds, dining tables, office and outdoor furniture. Check out for yourself our quality furniture at any of our showrooms.";
 
   return (
     <div className="about-wrapper">
@@ -21,12 +33,8 @@ export default async function About() {
 
         <section className="about-hero">
           <div className="about-content">
-            <p className="lead-text">
-              We have ready to take furniture and we also make on orders. Looking for Sofa sets, Dining Tables, Beds, Cushions, Center tables, Carpets, you are in the right place.
-            </p>
-            <p>
-              With Innovation and continuous search for better materials, The Furniture Store delivers unparalleled quality furniture for your home and office including Sofa sets, beds, dining tables, office and outdoor furniture. Check out for yourself our quality furniture at any of our showrooms.
-            </p>
+            <p className="lead-text">{leadText}</p>
+            <p>{bodyText}</p>
             <Link href="/shop" className="btn-primary mt-4">
               Shop Now
             </Link>

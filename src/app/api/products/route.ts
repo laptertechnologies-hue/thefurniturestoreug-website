@@ -1,4 +1,5 @@
 import { NextResponse } from "next/dist/server/web/spec-extension/response";
+import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
@@ -30,7 +31,7 @@ export async function POST(req: Request) {
 
   try {
     const body = await req.json();
-    const { name, description, price, images, categoryId } = body;
+    const { name, description, price, discountPrice, images, categoryId, isAvailable } = body;
     
     if (!name || !price || !categoryId) {
       return NextResponse.json({ message: "Name, price, and category are required" }, { status: 400 });
@@ -41,12 +42,15 @@ export async function POST(req: Request) {
         name,
         description: description || "",
         price: parseFloat(price),
+        discountPrice: discountPrice ? parseFloat(discountPrice) : null,
         images: Array.isArray(images) ? images : (images ? [images] : []),
-        categoryId
+        categoryId,
+        isAvailable: isAvailable !== undefined ? Boolean(isAvailable) : true,
       },
       include: { category: true }
     });
 
+    revalidatePath('/', 'layout');
     return NextResponse.json(product, { status: 201 });
   } catch (error: any) {
     return NextResponse.json({ message: "Failed to create product" }, { status: 500 });
