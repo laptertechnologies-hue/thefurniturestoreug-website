@@ -227,7 +227,18 @@ export default async function Home() {
                         </div>
                       </div>
                       <div className="home-product-actions">
-                        <AddToCartButton product={product} />
+                        <AddToCartButton
+                          product={{
+                            id: product.id,
+                            name: product.name,
+                            price: product.price,
+                            discountPrice: product.discountPrice,
+                            image: product.images?.[0] || undefined,
+                            category: product.category?.name,
+                          }}
+                          showText={true}
+                          className="btn-primary"
+                        />
                       </div>
                     </div>
                   </div>
