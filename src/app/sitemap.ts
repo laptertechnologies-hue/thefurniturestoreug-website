@@ -1,11 +1,22 @@
 import { MetadataRoute } from 'next';
 import { prisma } from '@/lib/prisma';
 
+export const dynamic = 'force-dynamic';
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://www.thefurniturestoreug.com';
 
-  const products = await prisma.product.findMany({ select: { id: true, updatedAt: true } });
-  const categories = await prisma.category.findMany({ select: { id: true, updatedAt: true } });
+  let products: { id: string; updatedAt: Date }[] = [];
+  let categories: { id: string; updatedAt: Date }[] = [];
+
+  try {
+    if (process.env.DATABASE_URL) {
+      products = await prisma.product.findMany({ select: { id: true, updatedAt: true } });
+      categories = await prisma.category.findMany({ select: { id: true, updatedAt: true } });
+    }
+  } catch {
+    // Allow build-time prerender fallback when DATABASE_URL is not reachable
+  }
 
   const productUrls = products.map((product) => ({
     url: `${baseUrl}/product/${product.id}`,
