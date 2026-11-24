@@ -24,8 +24,8 @@ export const authOptions: NextAuthOptions = {
           throw new Error("Invalid credentials");
         }
         
-        const user = await prisma.user.findUnique({
-          where: { email: credentials.email }
+        const user = await prisma.user.findFirst({
+          where: { email: { equals: credentials.email.trim(), mode: "insensitive" } }
         });
 
         if (!user || !user.password) {
@@ -58,6 +58,13 @@ export const authOptions: NextAuthOptions = {
         // @ts-ignore - custom property
         token.role = user.role;
         token.id = user.id;
+      } else if (token.id) {
+        const dbUser = await prisma.user.findUnique({
+          where: { id: String(token.id) },
+          select: { role: true }
+        });
+        // @ts-ignore - sync live role changes immediately
+        token.role = dbUser ? dbUser.role : "USER";
       }
       return token;
     },

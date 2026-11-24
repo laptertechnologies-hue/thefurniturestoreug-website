@@ -17,7 +17,10 @@ import {
   Sparkles,
   ExternalLink,
   Search,
-  RotateCcw
+  RotateCcw,
+  ShieldCheck,
+  UserPlus,
+  ShieldOff
 } from "lucide-react";
 import "./page.css";
 import "./forms.css";
@@ -32,6 +35,8 @@ export default function AdminDashboard() {
   const [slides, setSlides] = useState<any[]>([]);
   const [testimonials, setTestimonials] = useState<any[]>([]);
   const [orders, setOrders] = useState<any[]>([]);
+  const [users, setUsers] = useState<any[]>([]);
+  const [userSearch, setUserSearch] = useState("");
   const [productSearch, setProductSearch] = useState("");
 
   // Category Form
@@ -83,6 +88,15 @@ export default function AdminDashboard() {
   const [isSavingSettings, setIsSavingSettings] = useState(false);
   const [settingsMsg, setSettingsMsg] = useState("");
 
+  // Manage Admins / Team State
+  const [newAdminName, setNewAdminName] = useState("");
+  const [newAdminEmail, setNewAdminEmail] = useState("");
+  const [newAdminPassword, setNewAdminPassword] = useState("");
+  const [newAdminRole, setNewAdminRole] = useState<"ADMIN" | "USER">("ADMIN");
+  const [isSavingUser, setIsSavingUser] = useState(false);
+  const [userMsg, setUserMsg] = useState("");
+  const [userErr, setUserErr] = useState("");
+
   useEffect(() => {
     // @ts-ignore
     if (status === "unauthenticated" || (session && session.user?.role !== "ADMIN")) {
@@ -104,6 +118,12 @@ export default function AdminDashboard() {
     fetchTestimonials();
     fetchOrders();
     fetchSettings();
+    fetchUsers();
+  };
+
+  const fetchUsers = async () => {
+    const res = await fetch("/api/users");
+    if (res.ok) setUsers(await res.json());
   };
 
   const fetchOrders = async () => {
@@ -401,6 +421,73 @@ export default function AdminDashboard() {
     }
   };
 
+  // MANAGE ADMINS / TEAM LOGIC
+  const handleCreateUser = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSavingUser(true);
+    setUserMsg("");
+    setUserErr("");
+    try {
+      const res = await fetch("/api/users", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: newAdminName,
+          email: newAdminEmail,
+          password: newAdminPassword,
+          role: newAdminRole
+        })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setNewAdminName("");
+        setNewAdminEmail("");
+        setNewAdminPassword("");
+        setNewAdminRole("ADMIN");
+        setUserMsg(`Account created for ${data.email} (${data.role}).`);
+        fetchUsers();
+      } else {
+        setUserErr(data.error || "Failed to create account");
+      }
+    } finally {
+      setIsSavingUser(false);
+    }
+  };
+
+  const handleToggleUserRole = async (u: any) => {
+    const nextRole = u.role === "ADMIN" ? "USER" : "ADMIN";
+    const actionLabel = nextRole === "ADMIN" ? `promote ${u.email} to ADMIN` : `demote ${u.email} to USER`;
+    if (!confirm(`Are you sure you want to ${actionLabel}?`)) return;
+    setUserMsg("");
+    setUserErr("");
+    const res = await fetch(`/api/users/${u.id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ role: nextRole })
+    });
+    const data = await res.json();
+    if (res.ok) {
+      setUserMsg(`${u.email} is now ${nextRole}.`);
+      fetchUsers();
+    } else {
+      setUserErr(data.error || "Failed to update role");
+    }
+  };
+
+  const handleDeleteUser = async (u: any) => {
+    if (!confirm(`Permanently delete user ${u.email}? Their past orders will remain in order history.`)) return;
+    setUserMsg("");
+    setUserErr("");
+    const res = await fetch(`/api/users/${u.id}`, { method: "DELETE" });
+    const data = await res.json();
+    if (res.ok) {
+      setUserMsg(`Deleted user ${u.email}.`);
+      fetchUsers();
+    } else {
+      setUserErr(data.error || "Failed to delete user");
+    }
+  };
+
   if (status === "loading") {
     return <div className="admin-loading">Loading Dashboard...</div>;
   }
@@ -420,6 +507,16 @@ export default function AdminDashboard() {
       p.name?.toLowerCase().includes(productSearch.toLowerCase()) ||
       p.category?.name?.toLowerCase().includes(productSearch.toLowerCase())
   );
+
+  const filteredUsers = users.filter(
+    (u) =>
+      !userSearch.trim() ||
+      u.name?.toLowerCase().includes(userSearch.toLowerCase()) ||
+      u.email?.toLowerCase().includes(userSearch.toLowerCase())
+  );
+
+  // @ts-ignore
+  const currentAdminId = session.user?.id;
 
   return (
     <div className="admin-layout">
@@ -475,6 +572,12 @@ export default function AdminDashboard() {
             onClick={() => setActiveTab("orders")}
           >
             <ShoppingBag size={20} /> Orders ({orders.length})
+          </button>
+          <button
+            className={`admin-nav-item ${activeTab === "admins" ? "active" : ""}`}
+            onClick={() => setActiveTab("admins")}
+          >
+            <ShieldCheck size={20} /> Manage Admins ({users.filter((u) => u.role === "ADMIN").length})
           </button>
           <button
             className={`admin-nav-item ${activeTab === "settings" ? "active" : ""}`}
@@ -909,6 +1012,165 @@ export default function AdminDashboard() {
                     </tr>
                   ))}
                   {orders.length === 0 && <tr><td colSpan={6}>No orders found</td></tr>}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {/* MANAGE ADMINS / TEAM TAB */}
+        {activeTab === "admins" && (
+          <div className="admin-products animate-fade-in-up">
+            <div className="tab-header"><h2>Manage Admins &amp; Team Access</h2></div>
+            {userMsg && (
+              <div style={{ background: "#d1e7dd", color: "#0f5132", padding: "12px 16px", borderRadius: 8, marginBottom: 16, fontWeight: 600 }}>
+                {userMsg}
+              </div>
+            )}
+            {userErr && (
+              <div style={{ background: "#f8d7da", color: "#842029", padding: "12px 16px", borderRadius: 8, marginBottom: 16, fontWeight: 600 }}>
+                {userErr}
+              </div>
+            )}
+            <div className="admin-form-card">
+              <h3><UserPlus size={18} style={{ display: "inline", verticalAlign: "text-bottom", marginRight: 8 }} />Create New Admin or Team Account</h3>
+              <form onSubmit={handleCreateUser} className="admin-form">
+                <div className="form-row">
+                  <div className="form-group">
+                    <label>Full Name</label>
+                    <input
+                      type="text"
+                      placeholder="e.g. Hassan Kigongo"
+                      value={newAdminName}
+                      onChange={(e) => setNewAdminName(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Email Address</label>
+                    <input
+                      type="email"
+                      placeholder="e.g. hassan@thefurniturestoreug.com"
+                      value={newAdminEmail}
+                      onChange={(e) => setNewAdminEmail(e.target.value)}
+                      required
+                    />
+                  </div>
+                </div>
+                <div className="form-row">
+                  <div className="form-group">
+                    <label>Initial Password (min 6 characters)</label>
+                    <input
+                      type="password"
+                      placeholder="Enter initial password"
+                      value={newAdminPassword}
+                      onChange={(e) => setNewAdminPassword(e.target.value)}
+                      minLength={6}
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Account Role</label>
+                    <select value={newAdminRole} onChange={(e) => setNewAdminRole(e.target.value as "ADMIN" | "USER")}>
+                      <option value="ADMIN">ADMIN (Full Dashboard Access)</option>
+                      <option value="USER">USER (Standard Customer)</option>
+                    </select>
+                  </div>
+                </div>
+                <button type="submit" className="btn-primary" disabled={isSavingUser}>
+                  <Plus size={18} /> {isSavingUser ? "Creating..." : "Create Account"}
+                </button>
+              </form>
+            </div>
+
+            <div className="data-table-container">
+              <div style={{ padding: "14px 16px", borderBottom: "1px solid #eee", display: "flex", alignItems: "center", gap: 10 }}>
+                <Search size={18} />
+                <input
+                  type="text"
+                  placeholder="Search registered users by name or email to promote/demote..."
+                  value={userSearch}
+                  onChange={(e) => setUserSearch(e.target.value)}
+                  style={{ border: "none", outline: "none", width: "100%", fontSize: "0.95rem" }}
+                />
+              </div>
+              <table className="data-table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Orders</th>
+                    <th>Joined</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredUsers.map((u) => {
+                    const isSelf = u.id === currentAdminId;
+                    const isAdmin = u.role === "ADMIN";
+                    return (
+                      <tr key={u.id}>
+                        <td>
+                          <strong>{u.name || "Unnamed User"}</strong>
+                          {isSelf && (
+                            <span style={{ marginLeft: 8, background: "#cfe2ff", color: "#084298", padding: "2px 8px", borderRadius: 12, fontSize: "0.75rem", fontWeight: 600 }}>
+                              You
+                            </span>
+                          )}
+                        </td>
+                        <td>{u.email || "-"}</td>
+                        <td>
+                          <span
+                            style={{
+                              padding: "4px 10px",
+                              borderRadius: "12px",
+                              fontSize: "0.78rem",
+                              fontWeight: 700,
+                              backgroundColor: isAdmin ? "#d1e7dd" : "#e2e8f0",
+                              color: isAdmin ? "#0f5132" : "#334155"
+                            }}
+                          >
+                            {u.role}
+                          </span>
+                        </td>
+                        <td>{u._count?.orders ?? 0}</td>
+                        <td>{new Date(u.createdAt).toLocaleDateString()}</td>
+                        <td>
+                          {isSelf ? (
+                            <span style={{ color: "var(--color-brown-light)", fontSize: "0.85rem" }}>Current session</span>
+                          ) : (
+                            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                              <button
+                                type="button"
+                                onClick={() => handleToggleUserRole(u)}
+                                className="btn-secondary"
+                                style={{
+                                  display: "inline-flex",
+                                  alignItems: "center",
+                                  gap: 6,
+                                  padding: "6px 12px",
+                                  fontSize: "0.8rem"
+                                }}
+                                title={isAdmin ? "Demote to User" : "Promote to Admin"}
+                              >
+                                {isAdmin ? <><ShieldOff size={14} /> Demote to User</> : <><ShieldCheck size={14} /> Promote to Admin</>}
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => handleDeleteUser(u)}
+                                className="btn-icon-danger"
+                                title="Delete User"
+                              >
+                                <Trash2 size={16} />
+                              </button>
+                            </div>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                  {filteredUsers.length === 0 && <tr><td colSpan={6}>No matching users found</td></tr>}
                 </tbody>
               </table>
             </div>
