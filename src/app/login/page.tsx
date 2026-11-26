@@ -1,7 +1,7 @@
 "use client";
 
 import { signIn } from "next-auth/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { ArrowRight, Mail, Lock, ShoppingBag } from "lucide-react";
 import "./page.css";
@@ -10,12 +10,21 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [notice, setNotice] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("reason") === "timeout") {
+      setNotice("Your session expired due to inactivity to protect your account. Please sign in again.");
+    }
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError("");
+    setNotice("");
 
     try {
       const res = await signIn("credentials", {
@@ -25,7 +34,11 @@ export default function Login() {
       });
 
       if (res?.error) {
-        setError("Invalid email or password.");
+        setError(
+          res.error.includes("Too many failed")
+            ? res.error
+            : "Invalid email or password."
+        );
       } else {
         window.location.href = "/";
       }
@@ -75,6 +88,22 @@ export default function Login() {
           </div>
 
           <form onSubmit={handleSubmit} className="login-form">
+            {notice && (
+              <div
+                style={{
+                  background: "#fffbeb",
+                  border: "1px solid #fde68a",
+                  color: "#92400e",
+                  padding: "12px 14px",
+                  borderRadius: "10px",
+                  fontSize: "0.9rem",
+                  marginBottom: "14px",
+                  lineHeight: 1.45,
+                }}
+              >
+                {notice}
+              </div>
+            )}
             {error && <div className="error-message">{error}</div>}
             
             <div className="form-group">
